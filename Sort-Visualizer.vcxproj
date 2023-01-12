@@ -151,8 +151,12 @@
     <ClInclude Include="sortvisualizer\include\Sortable.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".gitignore" />
     <None Include="shaders\DefaultShader.frag" />
     <None Include="shaders\DefaultShader.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

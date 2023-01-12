@@ -13,7 +13,7 @@ SortController::SortController()
 
 SortController::~SortController()
 {
-	m_timeStepMiliseconds = 0;
+	m_timeStepMicroseconds = 0;
 	if (m_sorting.joinable())
 	{
 		m_sorting.join();
@@ -66,7 +66,7 @@ void SortController::bubbleSort()
 			// highlight current item
 			m_items[j].setColor(highlightColors::RED);
 			// wait between each step
-			std::this_thread::sleep_for(std::chrono::milliseconds(m_timeStepMiliseconds));
+			std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
 
 			if (m_items[j] > m_items[j + 1])
 			{
@@ -78,7 +78,7 @@ void SortController::bubbleSort()
 				m_items[j + 1] = temp;
 
 				// wait an additional interval to emphasize swapping
-				std::this_thread::sleep_for(std::chrono::milliseconds(m_timeStepMiliseconds));
+				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
 			}
 			// unhighlight current item
 			m_items[j].setColor(highlightColors::WHITE);

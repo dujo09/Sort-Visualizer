@@ -19,7 +19,7 @@ private:
 	std::atomic<bool> m_isSorting = false;
 	std::thread m_sorting;
 
-	unsigned int m_timeStepMiliseconds = 500;
+	unsigned int m_timeStepMicroseconds = 500;
 	SortType m_sortType = BUBBLE_SORT;
 public:
 	SortController();
@@ -37,7 +37,7 @@ public:
 	int getNumberOfItems() const { return m_items.size(); };
 
 	// setters
-	void setTimeStep(unsigned int timeStepMiliseconds) { m_timeStepMiliseconds = timeStepMiliseconds; };
+	void setTimeStep(unsigned int timeStepMicroseconds) { m_timeStepMicroseconds = timeStepMicroseconds; };
 	void setSortType(SortType sortType) { m_sortType = sortType; };
 private:
 	void bubbleSort();

@@ -156,15 +156,15 @@ void processInput(GLFWwindow* window, SortController* sortController)
 
 void configureSortController(SortController* sortController)
 {
-	unsigned int timeStepMiliseconds = 0;
+	unsigned int timeStepMicroseconds = 0;
 	unsigned int numberOfItems = 0;
 
 	std::cout << "Enter number of items: ";
 	std::cin >> numberOfItems;
-	std::cout << "Enter time step in miliseconds: ";
-	std::cin >> timeStepMiliseconds;
+	std::cout << "Enter time step in microseconds: ";
+	std::cin >> timeStepMicroseconds;
 
 	sortController->generateItems(numberOfItems);
 	sortController->shuffleItems();
-	sortController->setTimeStep(timeStepMiliseconds);
+	sortController->setTimeStep(timeStepMicroseconds);
 }
