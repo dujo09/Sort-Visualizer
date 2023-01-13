@@ -139,12 +139,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\glad\src\glad.c" />
+    <ClCompile Include="sortvisualizer\source\Renderer.cpp" />
     <ClCompile Include="sortvisualizer\source\SortController.cpp" />
     <ClCompile Include="sortvisualizer\Main.cpp" />
     <ClCompile Include="sortvisualizer\source\Shader.cpp" />
     <ClCompile Include="sortvisualizer\source\Sortable.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="sortvisualizer\include\Renderer.h" />
     <ClInclude Include="sortvisualizer\include\HighlightColors.h" />
     <ClInclude Include="sortvisualizer\include\SortController.h" />
     <ClInclude Include="sortvisualizer\include\Shader.h" />

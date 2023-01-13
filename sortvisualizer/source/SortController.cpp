@@ -60,36 +60,44 @@ void SortController::bubbleSort()
 {
 	for (int i = 0; i < m_items.size() - 1; i++)
 	{
-		// highlight last item of current loop
-		m_items[m_items.size() - i - 1].setColor(highlightColors::YELLOW);
-
 		for (int j = 0; j < m_items.size() - i - 1; j++)
-		{
-			// highlight current item
-			m_items[j].setColor(highlightColors::RED);
-			// wait between each step
-			std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
-
+		{	
 			if (m_items[j] > m_items[j + 1])
 			{
-				// highlight item being swapped
-				m_items[j + 1].setColor(highlightColors::RED);
-
 				Sortable temp = m_items[j];
 				m_items[j] = m_items[j + 1];
 				m_items[j + 1] = temp;
 
-				// wait an additional interval to emphasize swapping
+				// highlight items being swapped
+				m_items[j + 1].setColor(highlightColors::RED);
+				m_items[j].setColor(highlightColors::RED);
+				// wait an interval to emphasize swapping
 				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
+				// unhighlight items
+				m_items[j].setColor(highlightColors::WHITE);
+				m_items[j + 1].setColor(highlightColors::WHITE);
 			}
-			// unhighlight current item
-			m_items[j].setColor(highlightColors::WHITE);
-			// note: no need to unhighlight item at j + 1 since it will be highlighted in next loop
 		}
-		// unhighlight last item of current loop
-		m_items[m_items.size() - i - 1].setColor(highlightColors::WHITE);
 	}
+
+	highlightItemsAsSorted();
 
 	m_isSorting = false;
 	return;
+}
+
+void SortController::highlightItemsAsSorted()
+{
+	for (int i = 0; i < m_items.size(); ++i)
+	{
+		m_items[i].setColor(highlightColors::GREEN);
+		std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
+	}
+
+	std::this_thread::sleep_for(std::chrono::seconds(1));
+
+	for (int i = 0; i < m_items.size(); ++i)
+	{
+		m_items[i].setColor(highlightColors::WHITE);
+	}
 }

@@ -30,6 +30,9 @@
     <ClCompile Include="sortvisualizer\source\SortController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="sortvisualizer\source\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sortvisualizer\include\Sortable.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sortvisualizer\include\HighlightColors.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sortvisualizer\include\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

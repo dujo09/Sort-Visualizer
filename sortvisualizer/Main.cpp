@@ -12,14 +12,12 @@
 
 void processInput(GLFWwindow* window, SortController* sortContoller);
 
-const float GAP_WIDTH = 1.0f;
-
 const float SCREEN_WIDTH = 1600.0f;
 const float SCREEN_HEIGHT = 800.0f;
 
 // sort settings
-const unsigned int NUMBER_OF_ITEMS = 200;
-const unsigned int TIME_STEP_MICROSECONDS = 2;
+const unsigned int NUMBER_OF_ITEMS = 50;
+const unsigned int TIME_STEP_MICROSECONDS = 500;
 const SortType SORT_TYPE = BUBBLE_SORT;
 
 int main() {
@@ -93,7 +91,7 @@ int main() {
 	{
 		processInput(window, &sortController);
 
-		float rectangleWidth = SCREEN_WIDTH / sortController.getNumberOfItems() - GAP_WIDTH;
+		float rectangleWidth = SCREEN_WIDTH / sortController.getNumberOfItems();
 	
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -106,7 +104,7 @@ int main() {
 			// setup model matrix for each item
 			glm::mat4 modelMatrix = glm::mat4(1.0f);
 			modelMatrix = glm::translate(modelMatrix,
-				glm::vec3(i * (rectangleWidth + GAP_WIDTH), SCREEN_HEIGHT, 0.0f));
+				glm::vec3(i * rectangleWidth, SCREEN_HEIGHT, 0.0f));
 			modelMatrix = glm::scale(modelMatrix,
 				glm::vec3(rectangleWidth, sortController.getItems()[i].getValue() / sortController.getNumberOfItems() * SCREEN_HEIGHT, 1.0f));
 
@@ -138,6 +136,14 @@ void processInput(GLFWwindow* window, SortController* sortController)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
+	{
+		sortController->setTimeStep(TIME_STEP_MICROSECONDS / 100);
+	}
+	else if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
+	{
+		sortController->setTimeStep(TIME_STEP_MICROSECONDS);
 	}
 
 	if (!sortController->isSorting())
