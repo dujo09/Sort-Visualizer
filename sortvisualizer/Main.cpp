@@ -11,12 +11,16 @@
 
 
 void processInput(GLFWwindow* window, SortController* sortContoller);
-void configureSortController(SortController* sortController);
 
 const float GAP_WIDTH = 1.0f;
 
 const float SCREEN_WIDTH = 1600.0f;
 const float SCREEN_HEIGHT = 800.0f;
+
+// sort settings
+const unsigned int NUMBER_OF_ITEMS = 200;
+const unsigned int TIME_STEP_MICROSECONDS = 2;
+const SortType SORT_TYPE = BUBBLE_SORT;
 
 int main() {
 	// glfw: initialise and configure
@@ -75,8 +79,7 @@ int main() {
 	glBindVertexArray(0);
 
 	// create sort controller
-	SortController sortController = SortController();
-	sortController.generateItems(100);
+	SortController sortController = SortController(NUMBER_OF_ITEMS, TIME_STEP_MICROSECONDS, SORT_TYPE);
 	// create default shader
 	Shader defaultShader = Shader("shaders/DefaultShader.vert", "shaders/DefaultShader.frag");
 
@@ -139,10 +142,6 @@ void processInput(GLFWwindow* window, SortController* sortController)
 
 	if (!sortController->isSorting())
 	{
-		if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
-		{
-			configureSortController(sortController);
-		}
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
 			sortController->shuffleItems();
@@ -152,19 +151,4 @@ void processInput(GLFWwindow* window, SortController* sortController)
 			sortController->startSort();
 		}
 	}
-}
-
-void configureSortController(SortController* sortController)
-{
-	unsigned int timeStepMicroseconds = 0;
-	unsigned int numberOfItems = 0;
-
-	std::cout << "Enter number of items: ";
-	std::cin >> numberOfItems;
-	std::cout << "Enter time step in microseconds: ";
-	std::cin >> timeStepMicroseconds;
-
-	sortController->generateItems(numberOfItems);
-	sortController->shuffleItems();
-	sortController->setTimeStep(timeStepMicroseconds);
 }

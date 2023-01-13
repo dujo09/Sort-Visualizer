@@ -6,9 +6,11 @@
 #include <numeric>
 
 
-SortController::SortController()
+SortController::SortController(const unsigned int numberOfItems, const unsigned int timeStepMicroseconds, const SortType sortType):
+	m_timeStepMicroseconds(timeStepMicroseconds), m_sortType(sortType)
 {
-	m_items = std::vector<Sortable>(50);
+	generateItems(numberOfItems);
+	shuffleItems();
 }
 
 SortController::~SortController()

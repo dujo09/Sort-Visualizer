@@ -22,7 +22,7 @@ private:
 	unsigned int m_timeStepMicroseconds = 500;
 	SortType m_sortType = BUBBLE_SORT;
 public:
-	SortController();
+	SortController(const unsigned int numberOfItems, const unsigned int timeStepMicroseconds, const SortType sortType);
 	~SortController();
 
 	void startSort();
