@@ -17,15 +17,18 @@ class SortController
 private:
 	std::vector<Sortable> m_items;
 	std::atomic<bool> m_isSorting = false;
+	std::atomic<bool> m_isInterrupt = false;
 	std::thread m_sorting;
 
 	unsigned int m_timeStepMicroseconds = 0;
 	SortType m_sortType = BUBBLE_SORT;
 public:
-	SortController(unsigned int numberOfItems,unsigned int timeStepMicroseconds, SortType sortType);
+	SortController(unsigned int numberOfItems, unsigned int timeStepMicroseconds, SortType sortType);
 	~SortController();
 
+	void startSortWrapper();
 	void startSort();
+	void interruptSort() { m_isInterrupt = true; };
 	// vector controll
 	void generateItems(unsigned int itemCount);
 	void shuffleItems();
@@ -38,8 +41,10 @@ public:
 	void setSortType(SortType sortType) { m_sortType = sortType; };
 private:
 	// algorithms
-	void bubbleSort();
-	
+	// ----------
+	// bubble sort
+	int bubbleSort();
+	// misc methods
 	void highlightItemsAsSorted();
 };
 

@@ -12,12 +12,12 @@
 
 void processInput(GLFWwindow* window, SortController* sortContoller);
 
-const float SCREEN_WIDTH = 1600.0f;
-const float SCREEN_HEIGHT = 800.0f;
+const float SCREEN_WIDTH = 800.0f;
+const float SCREEN_HEIGHT = 600.0f;
 
 // sort settings
-const unsigned int NUMBER_OF_ITEMS = 50;
-const unsigned int TIME_STEP_MICROSECONDS = 500;
+const unsigned int NUMBER_OF_ITEMS = 40;
+const unsigned int TIME_STEP_MICROSECONDS = 500000;
 const SortType SORT_TYPE = BUBBLE_SORT;
 
 int main() {
@@ -137,14 +137,6 @@ void processInput(GLFWwindow* window, SortController* sortController)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
-	else if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
-	{
-		sortController->setTimeStep(TIME_STEP_MICROSECONDS / 100);
-	}
-	else if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
-	{
-		sortController->setTimeStep(TIME_STEP_MICROSECONDS);
-	}
 
 	if (!sortController->isSorting())
 	{
@@ -152,9 +144,27 @@ void processInput(GLFWwindow* window, SortController* sortController)
 		{
 			sortController->shuffleItems();
 		}
-		else if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
+		
+		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 		{
-			sortController->startSort();
+			sortController->startSortWrapper();
+		}
+	}
+	else
+	{
+		if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_PRESS)
+		{
+			sortController->setTimeStep(TIME_STEP_MICROSECONDS / 100);
+		}
+		
+		if (glfwGetKey(window, GLFW_KEY_TAB) == GLFW_RELEASE)
+		{
+			sortController->setTimeStep(TIME_STEP_MICROSECONDS);
+		}
+		
+		if (glfwGetKey(window, GLFW_KEY_DELETE) == GLFW_PRESS)
+		{
+			sortController->interruptSort();
 		}
 	}
 }

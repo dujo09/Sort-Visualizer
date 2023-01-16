@@ -146,8 +146,8 @@
     <ClCompile Include="sortvisualizer\source\Sortable.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="sortvisualizer\include\Renderer.h" />
     <ClInclude Include="sortvisualizer\include\HighlightColors.h" />
+    <ClInclude Include="sortvisualizer\include\Renderer.h" />
     <ClInclude Include="sortvisualizer\include\SortController.h" />
     <ClInclude Include="sortvisualizer\include\Shader.h" />
     <ClInclude Include="sortvisualizer\include\Sortable.h" />

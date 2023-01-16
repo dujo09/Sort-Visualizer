@@ -44,10 +44,10 @@
     <ClInclude Include="sortvisualizer\include\SortController.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sortvisualizer\include\HighlightColors.h">
+    <ClInclude Include="sortvisualizer\include\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sortvisualizer\include\Renderer.h">
+    <ClInclude Include="sortvisualizer\include\HighlightColors.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
