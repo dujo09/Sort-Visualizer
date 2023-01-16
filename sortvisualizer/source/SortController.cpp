@@ -46,6 +46,9 @@ void SortController::startSort()
 	case BUBBLE_SORT:
 		numberOfComparisons = bubbleSort();
 		break;
+	case EXCHANGE_SORT:
+		numberOfComparisons = exchangeSort();
+		break;
 	default:
 		break;
 	}
@@ -85,7 +88,6 @@ void SortController::shuffleItems()
 int SortController::bubbleSort()
 {
 	int numberOfComparisons = 0;
-
 	for (int i = 0; i < m_items.size() - 1; i++)
 	{
 		for (int j = 0; j < m_items.size() - i - 1; j++)
@@ -95,14 +97,37 @@ int SortController::bubbleSort()
 				return 0;
 			}
 
+			++numberOfComparisons;
+
 			if (m_items[j] > m_items[j + 1])
 			{
-				++numberOfComparisons;
 				swapItemsAndHighlight(j, j + 1);
 			}
 		}
 	}
+	return numberOfComparisons;
+}
 
+int SortController::exchangeSort()
+{
+	int numberOfComparisons = 0;
+	for (int i = 0; i < m_items.size() - 1; i++)
+	{
+		for (int j = i + 1; j < m_items.size(); j++)
+		{
+			if (m_isInterrupt)
+			{
+				return 0;
+			}
+
+			++numberOfComparisons;
+
+			if (m_items[i] > m_items[j])
+			{
+				swapItemsAndHighlight(i, j);
+			}
+		}
+	}
 	return numberOfComparisons;
 }
 
@@ -122,11 +147,13 @@ void SortController::swapItemsAndHighlight(int indexA, int indexB)
 }
 
 void SortController::highlightItemsAsSorted()
-{
+{ 
+	const int THREE_MILISECONDS = 3000000;
+	const int timeSleepPerItemNanoseconds = THREE_MILISECONDS / m_items.size();
 	for (int i = 0; i < m_items.size(); ++i)
 	{
 		m_items[i].setColor(highlightColors::GREEN);
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000 / m_items.size()));
+		std::this_thread::sleep_for(std::chrono::nanoseconds(timeSleepPerItemNanoseconds));
 	}
 
 	std::this_thread::sleep_for(std::chrono::seconds(1));

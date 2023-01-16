@@ -121,7 +121,8 @@ void configureSortController(SortController& sortController)
 	}
 
 	std::cout << "Sort algorithms avaliable: \n" 
-		<< "\t" << BUBBLE_SORT << " - bubble sort\n";
+		<< "\t" << BUBBLE_SORT << " - bubble sort\n"
+		<< "\t" << EXCHANGE_SORT << " - exchange sort\n";
 	std::cout << "Choose sort algorithm: ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> sortTypeOrdinal;
