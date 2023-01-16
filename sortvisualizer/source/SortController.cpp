@@ -34,7 +34,7 @@ void SortController::startSortWrapper()
 
 void SortController::startSort()
 {
-	std::cout << "Sorting...\n";
+	std::cout << "\nSorting...\n";
 
 	int numberOfComparisons = 0;
 
@@ -58,13 +58,13 @@ void SortController::startSort()
 		std::cout << "Number of comparisons: " << numberOfComparisons << "\n";
 		std::cout << "Number of items: " << m_items.size() << "\n";
 		std::cout << "Time step: " << m_timeStepMicroseconds << " mircoseconds | " 
-			<< (double)m_timeStepMicroseconds / 1000000 << " seconds\n\n";
+			<< (double)m_timeStepMicroseconds / 1000000 << " seconds\n";
 
 		highlightItemsAsSorted();
 	}
 	else
 	{
-		std::cout << "Sort interrupted\n\n";
+		std::cout << "Sort interrupted\n";
 	}
 }
 

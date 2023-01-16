@@ -6,17 +6,16 @@
 #include <GLFW/glfw3.h>
 
 #include <iostream>
+#include <string>
+#include <sstream>
 
 
-void processInput(GLFWwindow* window, SortController* sortContoller);
+void processInput(GLFWwindow*& window, SortController& sortContoller);
+void configureSortController(SortController& sortController);
 
 const float SCREEN_WIDTH = 800.0f;
 const float SCREEN_HEIGHT = 600.0f;
-
-// sort settings (temporary)
-const unsigned int NUMBER_OF_ITEMS = 40;
-const unsigned int TIME_STEP_MICROSECONDS = 500000;
-const SortType SORT_TYPE = BUBBLE_SORT;
+const unsigned int MAX_NUMBER_OF_ITEMS = 1000;
 
 int main() {
 	glfwInit();
@@ -45,12 +44,13 @@ int main() {
 		return -1;
 	}	
 
-	SortController sortController = SortController(NUMBER_OF_ITEMS, TIME_STEP_MICROSECONDS, SORT_TYPE);
+	SortController sortController = SortController();
+	configureSortController(sortController);
 	Renderer sortRenderer = Renderer("shaders/DefaultShader.vert", "shaders/DefaultShader.frag", SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	while (!glfwWindowShouldClose(window))
 	{
-		processInput(window, &sortController);
+		processInput(window, sortController);
 
 		sortRenderer.renderVectorAsRectangles(sortController.getItems());
 
@@ -63,30 +63,75 @@ int main() {
 	return 0;
 }
 
-void processInput(GLFWwindow* window, SortController* sortController)
+void processInput(GLFWwindow*& window, SortController& sortController)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
 	}
 
-	if (!sortController->isSorting())
+	if (!sortController.isSorting())
 	{
 		if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
 		{
-			sortController->shuffleItems();
+			sortController.shuffleItems();
 		}
 		
 		if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 		{
-			sortController->startSortWrapper();
+			sortController.startSortWrapper();
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_INSERT) == GLFW_PRESS)
+		{
+			configureSortController(sortController);
 		}
 	}
 	else
 	{		
 		if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS)
 		{
-			sortController->interruptSort();
+			sortController.interruptSort();
 		}
 	}
+}
+
+void configureSortController(SortController& sortController)
+{
+	std::string input;
+	int numberOfItems = 0;
+	int timeStepMicroseconds = 0;
+	int sortTypeOrdinal = 0;
+
+	std::cout << "SORT CONFIGURATION\n";
+	std::cout << "Enter number of items (max is " << MAX_NUMBER_OF_ITEMS << "): ";
+	std::getline(std::cin, input);
+	std::stringstream(input) >> numberOfItems;
+	if (numberOfItems > MAX_NUMBER_OF_ITEMS || numberOfItems < 0)
+	{
+		numberOfItems = MAX_NUMBER_OF_ITEMS;
+	}
+
+	std::cout << "Enter time step (in microseconds): ";
+	std::getline(std::cin, input);
+	std::stringstream(input) >> timeStepMicroseconds;
+	if (timeStepMicroseconds < 0)
+	{
+		timeStepMicroseconds = 0;
+	}
+
+	std::cout << "Sort algorithms avaliable: \n" 
+		<< "\t" << BUBBLE_SORT << " - bubble sort\n";
+	std::cout << "Choose sort algorithm: ";
+	std::getline(std::cin, input);
+	std::stringstream(input) >> sortTypeOrdinal;
+	if (sortTypeOrdinal < 0)
+	{
+		sortTypeOrdinal = 0;
+	}
+
+	sortController.generateItems(numberOfItems);
+	sortController.shuffleItems();
+	sortController.setTimeStep(timeStepMicroseconds);
+	sortController.setSortType(SortType(sortTypeOrdinal));
 }

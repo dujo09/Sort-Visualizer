@@ -23,7 +23,7 @@ private:
 	unsigned int m_timeStepMicroseconds = 0;
 	SortType m_sortType = BUBBLE_SORT;
 public:
-	SortController(unsigned int numberOfItems, unsigned int timeStepMicroseconds, SortType sortType);
+	SortController(unsigned int numberOfItems = 100, unsigned int timeStepMicroseconds = 0, SortType sortType = BUBBLE_SORT);
 	~SortController();
 
 	void startSortWrapper();
