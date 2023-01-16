@@ -29,20 +29,17 @@ public:
 	void startSortWrapper();
 	void startSort();
 	void interruptSort() { m_isInterrupt = true; };
-	// vector controll
+
 	void generateItems(unsigned int itemCount);
 	void shuffleItems();
-	// getters
+
 	bool isSorting() const { return m_isSorting; };
 	std::vector<Sortable> getItems() const { return m_items; };
 	int getNumberOfItems() const { return m_items.size(); };
-	// setters
+
 	void setTimeStep(unsigned int timeStepMicroseconds) { m_timeStepMicroseconds = timeStepMicroseconds; };
 	void setSortType(SortType sortType) { m_sortType = sortType; };
 private:
-	// algorithms
-	// ----------
-	// bubble sort
 	int bubbleSort();
 
 	void swapItemsAndHighlight(int indexA, int indexB);

@@ -9,16 +9,13 @@
 class Shader 
 {
 public:
-    // the id of this shader program
     unsigned int m_ShaderProgramId = 0;
 
-    // constructor reads and builds the shader
-    Shader(const char* vertexPath, const char* fragmentPath);
+    Shader(const char* vertexShaderPath, const char* fragmentShaderPath);
     ~Shader();
 
-    // use/activate the shader
     void use();
-    // utility uniform functions
+
     void setBool(const char* name, bool value) const;
     void setInt(const char* name, int value) const;
     void setFloat(const char* name, float value) const;
@@ -32,6 +29,5 @@ public:
     void setMat3(const char* name, const glm::mat3& mat) const;
     void setMat4(const char* name, const glm::mat4& mat) const;
 private:
-    // utility function for checking shader compilation/linking errors
     void checkCompileErrors(GLuint shaderId, std::string type);
 };

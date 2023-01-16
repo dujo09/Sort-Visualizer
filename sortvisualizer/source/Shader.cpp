@@ -6,7 +6,6 @@
 
 
 Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
-    // 1. retrieve the vertex/fragment source code from filePath
     std::string vertexCode;
     std::string fragmentCode;
     std::ifstream vShaderFile;
@@ -14,17 +13,16 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     fShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
     try {
-        // open files
         vShaderFile.open(vertexShaderPath);
         fShaderFile.open(fragmentShaderPath);
         std::stringstream vShaderStream, fShaderStream;
-        // read file's buffer contents into streams
+
         vShaderStream << vShaderFile.rdbuf();
         fShaderStream << fShaderFile.rdbuf();
-        // close file handlers
+
         vShaderFile.close();
         fShaderFile.close();
-        // convert stream into string
+
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
     } catch (std::ifstream::failure e) {
@@ -33,30 +31,26 @@ Shader::Shader(const char* vertexShaderPath, const char* fragmentShaderPath) {
     const char* vShaderCode = vertexCode.c_str();
     const char* fShaderCode = fragmentCode.c_str();
 
-    // 2. compile shaders
     unsigned int vertexShaderId, fragmentShaderId;
     int success;
     char infoLog[512];
 
-    // vertex Shader
     vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertexShaderId, 1, &vShaderCode, NULL);
     glCompileShader(vertexShaderId);
     checkCompileErrors(vertexShaderId, "VERTEX");
-    // fragment Shader
+
     fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragmentShaderId, 1, &fShaderCode, NULL);
     glCompileShader(fragmentShaderId);
     checkCompileErrors(fragmentShaderId, "FRAGMENT");
 
-    // shader Program
     m_ShaderProgramId = glCreateProgram();
     glAttachShader(m_ShaderProgramId, vertexShaderId);
     glAttachShader(m_ShaderProgramId, fragmentShaderId);
     glLinkProgram(m_ShaderProgramId);
     checkCompileErrors(m_ShaderProgramId, "PROGRAM");
 
-    // delete the shaders as they're linked into our program now and no longer necessary
     glDeleteShader(vertexShaderId);
     glDeleteShader(fragmentShaderId);
 }

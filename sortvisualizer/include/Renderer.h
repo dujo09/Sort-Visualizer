@@ -16,7 +16,6 @@ public:
 		const float screenWidth, const float screenHeight);
 	~Renderer();
 	
-	// render methods
-	void renderVectorAsRectangles(std::vector<Sortable> items);
+	void renderVectorAsRectangles(const std::vector<Sortable>& items);
 };
 

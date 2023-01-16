@@ -10,7 +10,6 @@ Renderer::Renderer(const char* vertexShaderPath, const char* fragmentShaderPath,
 	m_defaultShader(vertexShaderPath, fragmentShaderPath), 
 	m_screenWidth(screenWidth), m_screenHeight(screenHeight)
 {
-	// setup vertices and buffers
 	float quadVertices[] = {
 		0.0f,	-1.0f,
 		1.0f,	 0.0f,
@@ -39,7 +38,6 @@ Renderer::Renderer(const char* vertexShaderPath, const char* fragmentShaderPath,
 	glm::mat4 projectionMatrix = glm::ortho(0.0f, screenWidth, screenHeight, 0.0f, -1.0f, 1.0f);
 	m_defaultShader.use();
 	m_defaultShader.setMat4("projectionMatrix", projectionMatrix);
-
 }
 
 Renderer::~Renderer()
@@ -48,7 +46,7 @@ Renderer::~Renderer()
 	glDeleteBuffers(1, &m_VBO);
 }
 
-void Renderer::renderVectorAsRectangles(std::vector<Sortable> items)
+void Renderer::renderVectorAsRectangles(const std::vector<Sortable>& items)
 {
 	const float rectangleWidth = m_screenWidth / items.size();
 
@@ -60,17 +58,13 @@ void Renderer::renderVectorAsRectangles(std::vector<Sortable> items)
 
 	for (int i = 0; i < items.size(); ++i)
 	{
-		// item vector is filled with values 1 through size of vector so max value is size of vector
 		const float rectangleHeight = items[i].getValue() / items.size() * m_screenHeight;
 
-		// setup model matrix for each item
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
 		modelMatrix = glm::translate(modelMatrix, glm::vec3(rectangleWidth * i, m_screenHeight, 0.0f));
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(rectangleWidth, rectangleHeight, 1.0f));
 
-		// set model matrix uniform
 		m_defaultShader.setMat4("modelMatrix", modelMatrix);
-		// set color uniform for each item
 		m_defaultShader.setVec3("color", items[i].getColor());
 
 		glDrawArrays(GL_TRIANGLES, 0, 6);

@@ -102,6 +102,7 @@ int SortController::bubbleSort()
 			}
 		}
 	}
+
 	return numberOfComparisons;
 }
 
@@ -111,12 +112,11 @@ void SortController::swapItemsAndHighlight(int indexA, int indexB)
 	m_items[indexA] = m_items[indexB];
 	m_items[indexB] = temp;
 
-	// highlight items being swapped
 	m_items[indexA].setColor(highlightColors::RED);
 	m_items[indexB].setColor(highlightColors::RED);
-	// wait an interval to emphasize swapping
+
 	std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
-	// unhighlight items
+
 	m_items[indexA].setColor(highlightColors::WHITE);
 	m_items[indexB].setColor(highlightColors::WHITE);
 }
