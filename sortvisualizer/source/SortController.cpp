@@ -79,7 +79,6 @@ void SortController::generateItems(unsigned int itemCount)
 
 void SortController::shuffleItems()
 {
-	unsigned int seed = std::chrono::system_clock::now().time_since_epoch().count();
 	std::shuffle(m_items.begin(), m_items.end(), std::default_random_engine());
 }
 
@@ -99,22 +98,27 @@ int SortController::bubbleSort()
 			if (m_items[j] > m_items[j + 1])
 			{
 				++numberOfComparisons;
-				Sortable temp = m_items[j];
-				m_items[j] = m_items[j + 1];
-				m_items[j + 1] = temp;
-
-				// highlight items being swapped
-				m_items[j + 1].setColor(highlightColors::RED);
-				m_items[j].setColor(highlightColors::RED);
-				// wait an interval to emphasize swapping
-				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
-				// unhighlight items
-				m_items[j].setColor(highlightColors::WHITE);
-				m_items[j + 1].setColor(highlightColors::WHITE);
+				swapItemsAndHighlight(j, j + 1);
 			}
 		}
 	}
 	return numberOfComparisons;
+}
+
+void SortController::swapItemsAndHighlight(int indexA, int indexB)
+{
+	Sortable temp = m_items[indexA];
+	m_items[indexA] = m_items[indexB];
+	m_items[indexB] = temp;
+
+	// highlight items being swapped
+	m_items[indexA].setColor(highlightColors::RED);
+	m_items[indexB].setColor(highlightColors::RED);
+	// wait an interval to emphasize swapping
+	std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
+	// unhighlight items
+	m_items[indexA].setColor(highlightColors::WHITE);
+	m_items[indexB].setColor(highlightColors::WHITE);
 }
 
 void SortController::highlightItemsAsSorted()

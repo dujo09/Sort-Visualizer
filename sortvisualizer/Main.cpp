@@ -1,11 +1,9 @@
 #include "SortController.h"
 #include "Shader.h"
+#include "Renderer.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 
@@ -48,82 +46,24 @@ int main() {
 		std::cout << "Failed to load GLAD function\n";
 		glfwTerminate();
 		return -1;
-	}
-
-	// setup vertices and buffers
-	float quadVertices[] = {
-		0.0f,	-1.0f,
-		1.0f,	 0.0f,
-		0.0f,	 0.0f,
-
-		0.0f,	-1.0f,
-		1.0f,	-1.0f,
-		1.0f,	 0.0f,
-	};
-	
-	unsigned int quadVAO, quadVBO;
-	glGenVertexArrays(1, &quadVAO);
-	glGenBuffers(1, &quadVBO);
-
-	glBindVertexArray(quadVAO);
-
-	glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
-
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
+	}	
 
 	// create sort controller
 	SortController sortController = SortController(NUMBER_OF_ITEMS, TIME_STEP_MICROSECONDS, SORT_TYPE);
-	// create default shader
-	Shader defaultShader = Shader("shaders/DefaultShader.vert", "shaders/DefaultShader.frag");
-
-	// set projection matrix once (window is not resizeable)
-	glm::mat4 projectionMatrix = glm::ortho(0.0f, SCREEN_WIDTH, SCREEN_HEIGHT, 0.0f, -1.0f, 1.0f);
-	defaultShader.use();
-	defaultShader.setMat4("projectionMatrix", projectionMatrix);
-
+	// create renderer
+	Renderer sortRenderer = Renderer("shaders/DefaultShader.vert", "shaders/DefaultShader.frag", SCREEN_WIDTH, SCREEN_HEIGHT);
+	
 	// render loop
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window, &sortController);
 
-		float rectangleWidth = SCREEN_WIDTH / sortController.getNumberOfItems();
-	
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
-		defaultShader.use();
-		glBindVertexArray(quadVAO);
-
-		for (int i = 0; i < sortController.getNumberOfItems(); ++i)
-		{
-			// setup model matrix for each item
-			glm::mat4 modelMatrix = glm::mat4(1.0f);
-			modelMatrix = glm::translate(modelMatrix,
-				glm::vec3(i * rectangleWidth, SCREEN_HEIGHT, 0.0f));
-			modelMatrix = glm::scale(modelMatrix,
-				glm::vec3(rectangleWidth, sortController.getItems()[i].getValue() / sortController.getNumberOfItems() * SCREEN_HEIGHT, 1.0f));
-
-			// set model matrix uniform
-			defaultShader.setMat4("modelMatrix", modelMatrix);
-
-			// set color uniform for each item
-			defaultShader.setVec3("color", sortController.getItems()[i].getColor());
-
-			glDrawArrays(GL_TRIANGLES, 0, 6);
-		}
+		sortRenderer.renderVectorAsRectangles(sortController.getItems());
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
-	glDeleteVertexArrays(1, &quadVAO);
-	glDeleteBuffers(1, &quadVBO);
 
 	// glfw: terminate, clearing all previously allocated GLFW resources.
 	glfwTerminate();
@@ -162,7 +102,7 @@ void processInput(GLFWwindow* window, SortController* sortController)
 			sortController->setTimeStep(TIME_STEP_MICROSECONDS);
 		}
 		
-		if (glfwGetKey(window, GLFW_KEY_DELETE) == GLFW_PRESS)
+		if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS)
 		{
 			sortController->interruptSort();
 		}

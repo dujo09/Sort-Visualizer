@@ -44,7 +44,8 @@ private:
 	// ----------
 	// bubble sort
 	int bubbleSort();
-	// misc methods
+
+	void swapItemsAndHighlight(int indexA, int indexB);
 	void highlightItemsAsSorted();
 };
 
