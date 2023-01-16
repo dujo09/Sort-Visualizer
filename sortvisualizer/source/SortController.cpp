@@ -49,6 +49,9 @@ void SortController::startSort()
 	case EXCHANGE_SORT:
 		numberOfComparisons = exchangeSort();
 		break;
+	case SELECTION_SORT:
+		numberOfComparisons = selectionSort();
+		break;
 	default:
 		break;
 	}
@@ -126,6 +129,31 @@ int SortController::exchangeSort()
 			{
 				swapItemsAndHighlight(i, j);
 			}
+		}
+	}
+	return numberOfComparisons;
+}
+
+int SortController::selectionSort()
+{
+	int numberOfComparisons = 0;
+
+	int minIndex = 0;
+	for (int i = 0; i < m_items.size() - 1; i++)
+	{
+		minIndex = i;
+		for (int j = i + 1; j < m_items.size(); j++)
+		{
+			++numberOfComparisons;
+			if (m_items[j] < m_items[minIndex])
+			{
+				minIndex = j;
+			}
+		}
+
+		if (minIndex != i)
+		{
+			swapItemsAndHighlight(i, minIndex);
 		}
 	}
 	return numberOfComparisons;

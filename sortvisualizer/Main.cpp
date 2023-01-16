@@ -103,7 +103,7 @@ void configureSortController(SortController& sortController)
 	int timeStepMicroseconds = 0;
 	int sortTypeOrdinal = 0;
 
-	std::cout << "SORT CONFIGURATION\n";
+	std::cout << "\nSORT CONFIGURATION\n";
 	std::cout << "Enter number of items (max is " << MAX_NUMBER_OF_ITEMS << "): ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> numberOfItems;
@@ -122,7 +122,8 @@ void configureSortController(SortController& sortController)
 
 	std::cout << "Sort algorithms avaliable: \n" 
 		<< "\t" << BUBBLE_SORT << " - bubble sort\n"
-		<< "\t" << EXCHANGE_SORT << " - exchange sort\n";
+		<< "\t" << EXCHANGE_SORT << " - exchange sort\n"
+		<< "\t" << SELECTION_SORT << " - selection sort\n";
 	std::cout << "Choose sort algorithm: ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> sortTypeOrdinal;

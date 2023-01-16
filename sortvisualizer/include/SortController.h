@@ -10,7 +10,8 @@
 enum SortType
 {
 	BUBBLE_SORT,
-	EXCHANGE_SORT
+	EXCHANGE_SORT,
+	SELECTION_SORT
 };
 
 class SortController
@@ -43,6 +44,7 @@ public:
 private:
 	int bubbleSort();
 	int exchangeSort();
+	int selectionSort();
 
 	void swapItemsAndHighlight(int indexA, int indexB);
 	void highlightItemsAsSorted();
