@@ -6,13 +6,19 @@
 #include <vector>
 #include <thread>
 #include <atomic>
+#include <functional>
 
 enum SortType
 {
 	BUBBLE_SORT,
 	EXCHANGE_SORT,
 	SELECTION_SORT,
-	INSERTION_SORT
+	INSERTION_SORT,
+	SHELL_SORT,
+	SHELL_SORT_HIBBARD,
+
+	QUICK_SORT,
+	MERGE_SORT
 };
 
 class SortController
@@ -47,6 +53,10 @@ private:
 	int exchangeSort();
 	int selectionSort();
 	int insertionSort();
+
+	int shellSort(std::function<int(int, int)> gapSizeFunction);
+	static int calculateShellGapSize(int numberOfItems, int iterationNumber);
+	static int calculateHibbardGapSize(int numberOfItems, int iterationNumber);
 
 	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor);
 	void highlightItemsAsSorted();

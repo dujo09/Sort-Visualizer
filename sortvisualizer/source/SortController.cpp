@@ -55,6 +55,12 @@ void SortController::startSort()
 	case INSERTION_SORT:
 		numberOfComparisons = insertionSort();
 		break;
+	case SHELL_SORT:
+		numberOfComparisons = shellSort(&calculateShellGapSize);
+		break;
+	case SHELL_SORT_HIBBARD:
+		numberOfComparisons = shellSort(&calculateHibbardGapSize);
+		break;
 	default:
 		break;
 	}
@@ -192,7 +198,7 @@ int SortController::insertionSort()
 			if (keyItem < m_items[i])
 			{
 				m_items[i + 1] = m_items[i];
-				m_items[i] = keyItem; // in order to better visualize insertion
+				m_items[i] = keyItem; // done here in order to better visualize insertion
 
 				m_items[i].setColor(highlightColors::RED);
 				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
@@ -206,6 +212,50 @@ int SortController::insertionSort()
 
 	}
 	return numberOfComparisons;
+}
+
+int SortController::shellSort(std::function<int(int, int)> gapSizeFunction)
+{
+	int numberOfComparisons = 0, iterationNumber = 0, gapSize = 0;
+
+	while ((gapSize = gapSizeFunction(m_items.size(), iterationNumber)) > 0)
+	{
+		++iterationNumber;
+
+		for (int i = gapSize; i < m_items.size(); i += 1)
+		{
+			if (m_isInterrupt)
+			{
+				return 0;
+			}
+
+			Sortable keyItem = m_items[i];
+
+			for (int j = i; j >= gapSize && m_items[j - gapSize] > keyItem; j -= gapSize)
+			{
+				m_items[j] = m_items[j - gapSize];
+				m_items[j - gapSize] = keyItem; // done here in order to better visualize insertion
+
+				m_items[j].setColor(highlightColors::RED);
+				m_items[j - gapSize].setColor(highlightColors::RED);
+				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
+				m_items[j].setColor(highlightColors::WHITE);
+				m_items[j - gapSize].setColor(highlightColors::WHITE);
+			}
+		}
+	}
+	return numberOfComparisons;
+}
+
+int SortController::calculateShellGapSize(int numberOfItems, int iterationNumber)
+{
+	return numberOfItems / pow(2, iterationNumber + 1);
+}
+
+int SortController::calculateHibbardGapSize(int numberOfItems, int iterationNumber)
+{
+	const int maxNumberOfIterations = log(numberOfItems + 1) / log(2);
+	return pow(2, maxNumberOfIterations - iterationNumber) - 1;;
 }
 
 void SortController::swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor)

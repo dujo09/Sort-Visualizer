@@ -48,7 +48,8 @@ Renderer::~Renderer()
 
 void Renderer::renderVectorAsRectangles(const std::vector<Sortable>& items)
 {
-	const float rectangleWidth = m_screenWidth / items.size();
+	const float distanceBetweenRectangles = items.size() > 200 ? 0.0f : 1.0f;
+	const float rectangleWidth = m_screenWidth / items.size() - distanceBetweenRectangles;
 
 	glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -61,7 +62,7 @@ void Renderer::renderVectorAsRectangles(const std::vector<Sortable>& items)
 		const float rectangleHeight = items[i].getValue() / items.size() * m_screenHeight;
 
 		glm::mat4 modelMatrix = glm::mat4(1.0f);
-		modelMatrix = glm::translate(modelMatrix, glm::vec3(rectangleWidth * i, m_screenHeight, 0.0f));
+		modelMatrix = glm::translate(modelMatrix, glm::vec3((rectangleWidth + distanceBetweenRectangles)*i, m_screenHeight, 0.0f));
 		modelMatrix = glm::scale(modelMatrix, glm::vec3(rectangleWidth, rectangleHeight, 1.0f));
 
 		m_defaultShader.setMat4("modelMatrix", modelMatrix);

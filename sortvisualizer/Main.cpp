@@ -125,7 +125,9 @@ void configureSortController(SortController& sortController)
 		<< "\t" << BUBBLE_SORT << " - bubble sort\n"
 		<< "\t" << EXCHANGE_SORT << " - exchange sort\n"
 		<< "\t" << SELECTION_SORT << " - selection sort\n"
-		<< "\t" << INSERTION_SORT << " - insertion sort\n";
+		<< "\t" << INSERTION_SORT << " - insertion sort\n"
+		<< "\t" << SHELL_SORT << " - shell sort\n"
+		<< "\t" << SHELL_SORT_HIBBARD << " - shell sort with hibbard gap size\n";
 	std::cout << "Choose sort algorithm: ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> sortTypeOrdinal;
