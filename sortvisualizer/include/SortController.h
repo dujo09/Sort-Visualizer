@@ -11,7 +11,8 @@ enum SortType
 {
 	BUBBLE_SORT,
 	EXCHANGE_SORT,
-	SELECTION_SORT
+	SELECTION_SORT,
+	INSERTION_SORT
 };
 
 class SortController
@@ -45,8 +46,9 @@ private:
 	int bubbleSort();
 	int exchangeSort();
 	int selectionSort();
+	int insertionSort();
 
-	void swapItemsAndHighlight(int indexA, int indexB);
+	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor);
 	void highlightItemsAsSorted();
 };
 

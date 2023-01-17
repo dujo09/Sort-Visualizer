@@ -68,6 +68,7 @@ void processInput(GLFWwindow*& window, SortController& sortController)
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 	{
 		glfwSetWindowShouldClose(window, true);
+		sortController.interruptSort();
 	}
 
 	if (!sortController.isSorting())
@@ -123,7 +124,8 @@ void configureSortController(SortController& sortController)
 	std::cout << "Sort algorithms avaliable: \n" 
 		<< "\t" << BUBBLE_SORT << " - bubble sort\n"
 		<< "\t" << EXCHANGE_SORT << " - exchange sort\n"
-		<< "\t" << SELECTION_SORT << " - selection sort\n";
+		<< "\t" << SELECTION_SORT << " - selection sort\n"
+		<< "\t" << INSERTION_SORT << " - insertion sort\n";
 	std::cout << "Choose sort algorithm: ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> sortTypeOrdinal;

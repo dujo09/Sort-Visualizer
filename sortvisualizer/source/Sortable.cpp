@@ -17,6 +17,12 @@ bool Sortable::operator==(Sortable item)
 	return m_value == item.m_value;
 }
 
+void Sortable::operator=(Sortable item)
+{
+	this->m_value = item.m_value;
+	this->m_color = item.m_color;
+}
+
 bool Sortable::operator>(Sortable item) 
 {
 	return m_value > item.m_value;

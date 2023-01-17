@@ -21,5 +21,6 @@ public:
 	bool operator==(Sortable item);
 	bool operator>(Sortable item);
 	bool operator<(Sortable item);
+	void operator=(Sortable item);
 };
 
