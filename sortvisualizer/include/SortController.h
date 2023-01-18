@@ -37,7 +37,7 @@ public:
 
 	void startSortWrapper();
 	void startSort();
-	void interruptSort() { m_isInterrupt = true; };
+	void interruptSort();
 
 	void generateItems(unsigned int itemCount);
 	void shuffleItems();
@@ -54,11 +54,16 @@ private:
 	int selectionSort();
 	int insertionSort();
 
-	int shellSort(std::function<int(int, int)> gapSizeFunction);
+	int shellSort(std::function<int(int, int)> calculateGapSize);
 	static int calculateShellGapSize(int numberOfItems, int iterationNumber);
 	static int calculateHibbardGapSize(int numberOfItems, int iterationNumber);
 
-	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor);
-	void highlightItemsAsSorted();
+	int quickSortWrapper();
+	void quickSort(int lowIndex, int highIndex, int* numberOfComparisons);
+	int partitionWithPivotAtEnd(int lowIndex, int highIndex, int* numberOfComparisons);
+
+	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor, int timeSleepHighlight);
+	bool isSortedAndHighlight();
+	void setAllItemsColors(glm::vec3 highlightColor);
 };
 
