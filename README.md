@@ -1,5 +1,4 @@
-[![Shell sort demo gif](https://imagizer.imageshack.com/img924/2928/ZiAn2N.gif)]
-(https://www.youtube.com/watch?v=6ErQa2DV-JY "Shell sort demo gif")
+[![Shell sort demo gif](https://imagizer.imageshack.com/img924/2928/ZiAn2N.gif)](https://www.youtube.com/watch?v=6ErQa2DV-JY)
 
 # Sort algorithm visualizer
 
