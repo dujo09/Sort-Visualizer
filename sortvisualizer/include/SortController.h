@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Sortable.h"
-#include "HighlightColors.h"
+#include "VisualizerColors.h"
 
 #include <vector>
 #include <thread>

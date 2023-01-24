@@ -88,7 +88,7 @@ void SortController::startSort()
 		std::cout << "Sort interrupted\n";
 	}
 
-	setAllItemsColors(highlightColors::WHITE);
+	setAllItemsColors(visualizerColors::ITEM_DEFAULT_COLOR);
 }
 
 void SortController::interruptSort()
@@ -125,7 +125,7 @@ int SortController::bubbleSort()
 			++numberOfComparisons;
 			if (m_items[j] > m_items[j + 1])
 			{
-				swapAndHighlightItemsAtIndices(j, j + 1, highlightColors::RED, m_timeStepMicroseconds);
+				swapAndHighlightItemsAtIndices(j, j + 1, visualizerColors::ITEM_SWAP_COLOR, m_timeStepMicroseconds);
 			}
 		}
 	}
@@ -147,7 +147,7 @@ int SortController::exchangeSort()
 			++numberOfComparisons;
 			if (m_items[i] > m_items[j])
 			{
-				swapAndHighlightItemsAtIndices(i, j, highlightColors::RED, m_timeStepMicroseconds);
+				swapAndHighlightItemsAtIndices(i, j, visualizerColors::ITEM_SWAP_COLOR, m_timeStepMicroseconds);
 			}
 		}
 	}
@@ -169,24 +169,24 @@ int SortController::selectionSort()
 				return 0;
 			}
 
-			m_items[j].setColor(highlightColors::RED);
-			m_items[minIndex].setColor(highlightColors::RED);
+			m_items[j].setColor(visualizerColors::ITEM_SWAP_COLOR);
+			m_items[minIndex].setColor(visualizerColors::ITEM_SWAP_COLOR);
 			std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
 
 			++numberOfComparisons;
 			if (m_items[j] < m_items[minIndex])
 			{
-				m_items[minIndex].setColor(highlightColors::WHITE);
+				m_items[minIndex].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 				minIndex = j;
 			}
 
-			m_items[j].setColor(highlightColors::WHITE);
-			m_items[minIndex].setColor(highlightColors::WHITE);
+			m_items[j].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
+			m_items[minIndex].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 		}
 
 		if (minIndex != i)
 		{
-			swapAndHighlightItemsAtIndices(i, minIndex, highlightColors::RED, m_timeStepMicroseconds);
+			swapAndHighlightItemsAtIndices(i, minIndex, visualizerColors::ITEM_SWAP_COLOR, m_timeStepMicroseconds);
 		}
 	}
 	return numberOfComparisons;
@@ -213,9 +213,9 @@ int SortController::insertionSort()
 				m_items[i + 1] = m_items[i];
 				m_items[i] = keyItem; // done here in order to better visualize insertion
 
-				m_items[i].setColor(highlightColors::RED);
+				m_items[i].setColor(visualizerColors::ITEM_SWAP_COLOR);
 				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
-				m_items[i].setColor(highlightColors::WHITE);
+				m_items[i].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 			}
 			else
 			{
@@ -249,11 +249,11 @@ int SortController::shellSort(std::function<int(int, int)> calculateGapSize)
 				m_items[j] = m_items[j - gapSize];
 				m_items[j - gapSize] = keyItem; // done here in order to better visualize insertion
 
-				m_items[j].setColor(highlightColors::RED);
-				m_items[j - gapSize].setColor(highlightColors::RED);
+				m_items[j].setColor(visualizerColors::ITEM_SWAP_COLOR);
+				m_items[j - gapSize].setColor(visualizerColors::ITEM_SWAP_COLOR);
 				std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
-				m_items[j].setColor(highlightColors::WHITE);
-				m_items[j - gapSize].setColor(highlightColors::WHITE);
+				m_items[j].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
+				m_items[j - gapSize].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 			}
 		}
 	}
@@ -302,7 +302,7 @@ void SortController::quickSort(int lowIndex, int highIndex, int* numberOfCompari
 int SortController::partitionWithPivotAtEnd(int lowIndex, int highIndex, int* numberOfComparisons)
 {
 	Sortable pivotItem = m_items[highIndex];
-	m_items[highIndex].setColor(highlightColors::BLUE);
+	m_items[highIndex].setColor(visualizerColors::ITEM_HIGHLIGHT_COLOR_TWO);
 
 	int i = lowIndex - 1;
 
@@ -313,7 +313,7 @@ int SortController::partitionWithPivotAtEnd(int lowIndex, int highIndex, int* nu
 			return 0;
 		}
 		
-		m_items[j].setColor(highlightColors::ORANGE);
+		m_items[j].setColor(visualizerColors::ITEM_HIGHLIGHT_COLOR_ONE);
 		std::this_thread::sleep_for(std::chrono::microseconds(m_timeStepMicroseconds));
 
 		++(*numberOfComparisons);
@@ -321,22 +321,22 @@ int SortController::partitionWithPivotAtEnd(int lowIndex, int highIndex, int* nu
 		{
 			if(i != -1)
 			{
-				m_items[i].setColor(highlightColors::WHITE);
+				m_items[i].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 			}
 			++i;
-			swapAndHighlightItemsAtIndices(i, j, highlightColors::RED, m_timeStepMicroseconds);
-			m_items[i].setColor(highlightColors::PURPLE);
+			swapAndHighlightItemsAtIndices(i, j, visualizerColors::ITEM_SWAP_COLOR, m_timeStepMicroseconds);
+			m_items[i].setColor(visualizerColors::ITEM_HIGHLIGHT_COLOR_THREE);
 		}
-		m_items[j].setColor(highlightColors::WHITE);
+		m_items[j].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 	}
 
-	m_items[highIndex].setColor(highlightColors::WHITE);
+	m_items[highIndex].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 	if (i != -1)
 	{
-		m_items[i].setColor(highlightColors::WHITE);
+		m_items[i].setColor(visualizerColors::ITEM_DEFAULT_COLOR);
 	}
 
-	swapAndHighlightItemsAtIndices(i + 1, highIndex, highlightColors::RED, m_timeStepMicroseconds);
+	swapAndHighlightItemsAtIndices(i + 1, highIndex, visualizerColors::ITEM_SWAP_COLOR, m_timeStepMicroseconds);
 	return (i + 1);
 }
 
@@ -361,27 +361,27 @@ bool SortController::isSortedAndHighlight()
 	const int THREE_MILISECONDS = 3000000;
 	const int timeSleepPerItemNanoseconds = THREE_MILISECONDS / m_items.size();
 	
-	m_items[0].setColor(highlightColors::GREEN);
+	m_items[0].setColor(visualizerColors::ITEM_SORTED_COLOR);
 	for (int i = 1; i < m_items.size(); ++i)
 	{
-		m_items[i].setColor(highlightColors::RED);
+		m_items[i].setColor(visualizerColors::ITEM_SWAP_COLOR);
 		std::this_thread::sleep_for(std::chrono::nanoseconds(timeSleepPerItemNanoseconds));
 
 		if (m_items[i] > m_items[i - 1])
 		{
-			m_items[i].setColor(highlightColors::GREEN);
+			m_items[i].setColor(visualizerColors::ITEM_SORTED_COLOR);
 		}
 		else
 		{
-			setAllItemsColors(highlightColors::RED);
+			setAllItemsColors(visualizerColors::ITEM_SWAP_COLOR);
 			std::this_thread::sleep_for(std::chrono::seconds(1));
-			setAllItemsColors(highlightColors::WHITE);
+			setAllItemsColors(visualizerColors::ITEM_DEFAULT_COLOR);
 			return false;
 		}
 	}
 
 	std::this_thread::sleep_for(std::chrono::seconds(1));
-	setAllItemsColors(highlightColors::WHITE);
+	setAllItemsColors(visualizerColors::ITEM_DEFAULT_COLOR);
 	return true;
 }
 
