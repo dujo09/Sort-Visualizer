@@ -52,7 +52,7 @@ void Renderer::renderVectorAsRectangles(const std::vector<Sortable>& items)
 	const float distanceBetweenRectangles = items.size() > 200 ? 0.0f : 1.0f;
 	const float rectangleWidth = m_screenWidth / items.size() - distanceBetweenRectangles;
 
-	glClearColor(visualizerColors::BACKGROUND_COLOR.x, visualizerColors::BACKGROUND_COLOR.y, visualizerColors::BACKGROUND_COLOR.z, 0.0f);
+	glClearColor(visualizerColors::BLACK.x, visualizerColors::BLACK.y, visualizerColors::BLACK.z, 0.0f);
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	m_defaultShader.use();

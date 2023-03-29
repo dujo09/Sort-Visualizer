@@ -87,12 +87,25 @@ void processInput(GLFWwindow*& window, SortController& sortController)
 		{
 			configureSortController(sortController);
 		}
+
 	}
 	else
 	{		
 		if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS)
 		{
 			sortController.interruptSort();
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+		{
+			sortController.setTimeStep(sortController.getTimeStep() + 1);
+			std::cout << sortController.getTimeStep() << "\n";
+		}
+
+		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
+		{
+			sortController.setTimeStep(sortController.getTimeStep() - 1);
+			std::cout << sortController.getTimeStep() << "\n";
 		}
 	}
 }

@@ -47,6 +47,7 @@ public:
 	int getNumberOfItems() const { return m_items.size(); };
 
 	void setTimeStep(unsigned int timeStepMicroseconds) { m_timeStepMicroseconds = timeStepMicroseconds; };
+	int getTimeStep() const { return m_timeStepMicroseconds; };
 	void setSortType(SortType sortType) { m_sortType = sortType; };
 private:
 	int bubbleSort();
@@ -63,7 +64,7 @@ private:
 	int partitionWithPivotAtEnd(int lowIndex, int highIndex, int* numberOfComparisons);
 
 	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor, int timeSleepHighlight);
-	bool isSortedAndHighlight();
-	void setAllItemsColors(glm::vec3 highlightColor);
+	bool isSorted();
+	void highlightItems(glm::vec3 highlightColor);
 };
 
