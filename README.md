@@ -7,9 +7,9 @@ for better understanding how sorting algorithms work.
 |                                                                              |
 |:----------------------------------------------------------------------------:|
 |Shell sort demo                                                               |
-|<img src=".\art\shellSortDemo.gif?raw=true" width="100%">                     |
+|![Shell sort](art/shellSortDemo.gif)                                          |
 |Quick sort with 1000 items                                                    |
-|<img src=".\art\quickSort1000Items.png?raw=true" width="100%">                |
+|![Quick sort](art/quickSort1000Items.png)                                     |
 
 ## Implemented algorithms
 - Bubble sort
