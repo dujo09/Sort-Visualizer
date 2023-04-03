@@ -89,23 +89,23 @@ void processInput(GLFWwindow*& window, SortController& sortController)
 		}
 
 	}
-	else
+	else if(sortController.isSorting())
 	{		
 		if (glfwGetKey(window, GLFW_KEY_BACKSPACE) == GLFW_PRESS)
 		{
 			sortController.interruptSort();
 		}
 
+		const unsigned int TIME_STEP_DELTA = 2;
+		
 		if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
 		{
-			sortController.setTimeStep(sortController.getTimeStep() + 1);
-			std::cout << sortController.getTimeStep() << "\n";
+			sortController.setTimeStep(sortController.getTimeStep() + TIME_STEP_DELTA);
 		}
 
 		if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
 		{
-			sortController.setTimeStep(sortController.getTimeStep() - 1);
-			std::cout << sortController.getTimeStep() << "\n";
+			sortController.setTimeStep(sortController.getTimeStep() - TIME_STEP_DELTA);
 		}
 	}
 }

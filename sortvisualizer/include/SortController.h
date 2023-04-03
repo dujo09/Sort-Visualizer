@@ -46,7 +46,7 @@ public:
 	std::vector<Sortable> getItems() const { return m_items; };
 	int getNumberOfItems() const { return m_items.size(); };
 
-	void setTimeStep(unsigned int timeStepMicroseconds) { m_timeStepMicroseconds = timeStepMicroseconds; };
+	void setTimeStep(int timeStepMicroseconds);
 	int getTimeStep() const { return m_timeStepMicroseconds; };
 	void setSortType(SortType sortType) { m_sortType = sortType; };
 private:
@@ -63,8 +63,9 @@ private:
 	void quickSort(int lowIndex, int highIndex, int* numberOfComparisons);
 	int partitionWithPivotAtEnd(int lowIndex, int highIndex, int* numberOfComparisons);
 
-	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor, int timeSleepHighlight);
+	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor);
 	bool isSorted();
-	void highlightItems(glm::vec3 highlightColor);
+	void setItemsColors(glm::vec3 highlightColor);
+	void highlightItemsAsSorted();
 };
 
