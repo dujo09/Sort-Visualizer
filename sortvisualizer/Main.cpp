@@ -141,11 +141,12 @@ void configureSortController(SortController& sortController)
 		<< "\t" << INSERTION_SORT << " - insertion sort\n"
 		<< "\t" << SHELL_SORT << " - shell sort\n"
 		<< "\t" << SHELL_SORT_HIBBARD << " - shell sort with hibbard gap size\n"
-		<< "\t" << QUICK_SORT << " - quick sort\n";
+		<< "\t" << QUICK_SORT << " - quick sort\n"
+		<< "\t" << HEAP_SORT << " - heap sort\n";
 	std::cout << "Choose sort algorithm: ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> sortTypeOrdinal;
-	if (sortTypeOrdinal < 0)
+	if (sortTypeOrdinal < 0 || sortTypeOrdinal >= NUMBER_OF_SORTS)
 	{
 		sortTypeOrdinal = 0;
 	}

@@ -16,9 +16,10 @@ enum SortType
 	INSERTION_SORT,
 	SHELL_SORT,
 	SHELL_SORT_HIBBARD,
-
 	QUICK_SORT,
-	MERGE_SORT
+	HEAP_SORT,
+
+	NUMBER_OF_SORTS
 };
 
 class SortController
@@ -62,6 +63,10 @@ private:
 	int quickSortWrapper();
 	void quickSort(int lowIndex, int highIndex, int* numberOfComparisons);
 	int partitionWithPivotAtEnd(int lowIndex, int highIndex, int* numberOfComparisons);
+
+	int maxHeapify(int heapSize, int index);
+	int buildMaxHeap();
+	int heapSort();
 
 	void swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor);
 	bool isSorted();

@@ -64,6 +64,9 @@ void SortController::startSort()
 	case QUICK_SORT:
 		numberOfComparisons = quickSortWrapper();
 		break;
+	case HEAP_SORT:
+		numberOfComparisons = heapSort();
+		break;
 	default:
 		break;
 	}
@@ -351,6 +354,74 @@ int SortController::partitionWithPivotAtEnd(int lowIndex, int highIndex, int* nu
 
 	swapAndHighlightItemsAtIndices(i + 1, highIndex, visualizerColors::RED);
 	return (i + 1);
+}
+
+int SortController::maxHeapify(int heapSize, int index)
+{
+	if (m_isInterrupt)
+	{
+		return 0;
+	}
+
+	int leftChildIndex = index * 2 + 1;
+	int rightChildIndex = index * 2 + 2;
+	int largestIndex = index;
+
+	if (leftChildIndex < heapSize && m_items[leftChildIndex] > m_items[index])
+	{
+		largestIndex = leftChildIndex;
+	}
+	if (rightChildIndex < heapSize && m_items[rightChildIndex] > m_items[largestIndex])
+	{
+		largestIndex = rightChildIndex;
+	}
+
+	if (largestIndex != index)
+	{
+		swapAndHighlightItemsAtIndices(index, largestIndex, visualizerColors::RED);
+		return 2 + maxHeapify(heapSize, largestIndex);
+	}
+	// return number of comparisons
+	return 2;
+}
+
+int SortController::buildMaxHeap()
+{
+	int numberOfComparisons = 0;
+	int heapSize = m_items.size();
+
+	for (int i = heapSize / 2; i >= 0; --i)
+	{
+		if (m_isInterrupt)
+		{
+			return 0;
+		}
+
+		numberOfComparisons += maxHeapify(heapSize, i);
+	}
+	return numberOfComparisons;
+}
+
+int SortController::heapSort()
+{
+	int numberOfComparisons = 0;
+	int heapSize = m_items.size();
+
+	numberOfComparisons = buildMaxHeap();
+
+	for (int i = heapSize - 1; i > 0; --i)
+	{
+		if (m_isInterrupt)
+		{
+			return 0;
+		}
+
+		swapAndHighlightItemsAtIndices(0, i, visualizerColors::GREEN);
+		--heapSize;
+		numberOfComparisons += maxHeapify(heapSize, 0);
+	}
+
+	return numberOfComparisons;
 }
 
 void SortController::swapAndHighlightItemsAtIndices(int indexA, int indexB, const glm::vec3 highlightColor)
