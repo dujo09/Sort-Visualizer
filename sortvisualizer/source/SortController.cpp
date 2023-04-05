@@ -132,7 +132,7 @@ int SortController::bubbleSort()
 	for (int i = 0; i < m_items.size() - 1; i++)
 	{
 		for (int j = 0; j < m_items.size() - i - 1; j++)
-		{	
+		{
 			if (m_isInterrupt)
 			{
 				return 0;

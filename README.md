@@ -19,11 +19,13 @@ for better understanding how sorting algorithms work.
 - Shell sort
     - using Shell's and Hibbard's increment 
 - Quick sort
+- Heap sort
 
 ## Controls
 - **SPACE** - shuffle items
 - **ENTER** - start sort
 - **BACKSPACE** - interrupt sort
+- **UP ARROW / DOWN ARROW** - increase / decrease time step
 - **INSERT** - configure program
 - **ESCAPE** - exit program
 
