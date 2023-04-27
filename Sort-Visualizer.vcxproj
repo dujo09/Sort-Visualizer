@@ -75,7 +75,7 @@
     <LibraryPath>$(SolutionDir)dependencies\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)dependencies\glad\include;$(SolutionDir)dependencies\glfw\include;sortvisualizer/include;$(IncludePath)</IncludePath>
+    <IncludePath>$(SolutionDir)dependencies\glad\include;$(SolutionDir)dependencies\glm\include;$(SolutionDir)dependencies\glfw\include;sortvisualizer/include;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dependencies\glfw\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,6 +128,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +140,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="dependencies\glad\src\glad.c" />
-    <ClCompile Include="sortvisualizer\source\Renderer.cpp" />
     <ClCompile Include="sortvisualizer\source\SortController.cpp" />
     <ClCompile Include="sortvisualizer\Main.cpp" />
     <ClCompile Include="sortvisualizer\source\Shader.cpp" />
@@ -147,7 +147,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="sortvisualizer\include\VisualizerColors.h" />
-    <ClInclude Include="sortvisualizer\include\Renderer.h" />
     <ClInclude Include="sortvisualizer\include\SortController.h" />
     <ClInclude Include="sortvisualizer\include\Shader.h" />
     <ClInclude Include="sortvisualizer\include\Sortable.h" />

@@ -44,7 +44,7 @@ public:
 	void shuffleItems();
 
 	bool isSorting() const { return m_isSorting; };
-	std::vector<Sortable> getItems() const { return m_items; };
+	const std::vector<Sortable>& getItems() const { return m_items; };
 	int getNumberOfItems() const { return m_items.size(); };
 
 	void setTimeStep(int timeStepMicroseconds);

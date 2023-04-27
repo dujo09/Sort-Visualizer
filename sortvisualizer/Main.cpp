@@ -1,20 +1,24 @@
 #include "SortController.h"
 #include "Shader.h"
-#include "Renderer.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include <iostream>
 #include <string>
 #include <sstream>
+#include <vector>
 
 
 void processInput(GLFWwindow*& window, SortController& sortContoller);
 void configureSortController(SortController& sortController);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
-const float SCREEN_WIDTH = 800.0f;
-const float SCREEN_HEIGHT = 600.0f;
+const float INITIAL_SCREEN_WIDTH = 800.0f;
+const float INITIAL_SCREEN_HEIGHT = 600.0f;
 const unsigned int MAX_NUMBER_OF_ITEMS = 1000;
 
 int main() {
@@ -22,13 +26,12 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
 
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "Sort Visualizer", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(INITIAL_SCREEN_WIDTH, INITIAL_SCREEN_HEIGHT, "Sort Visualizer", NULL, NULL);
 	if (window == NULL)
 	{
 		std::cout << "Failed to create GLFW window\n";
@@ -36,6 +39,8 @@ int main() {
 		return -1;
 	}
 	glfwMakeContextCurrent(window);
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetWindowSizeLimits(window, 200, 200, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
 	{
@@ -44,15 +49,69 @@ int main() {
 		return -1;
 	}	
 
+	Shader defaultShader("shaders/DefaultShader.vert", "shaders/DefaultShader.frag");
+
+	float quadVertices[] = {
+		0.0f, -1.0f,
+		1.0f,  0.0f,
+		0.0f,  0.0f,
+
+		0.0f, -1.0f,
+		1.0f, -1.0f,
+		1.0f,  0.0f,
+	};
+
+	unsigned int VAO, VBO;
+
+	glGenVertexArrays(1, &VAO);
+	glGenBuffers(1, &VBO);
+
+	glBindVertexArray(VAO);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
 	SortController sortController = SortController();
 	configureSortController(sortController);
-	Renderer sortRenderer = Renderer("shaders/DefaultShader.vert", "shaders/DefaultShader.frag", SCREEN_WIDTH, SCREEN_HEIGHT);
 	
 	while (!glfwWindowShouldClose(window))
 	{
 		processInput(window, sortController);
 
-		sortRenderer.renderVectorAsRectangles(sortController.getItems());
+		defaultShader.use();
+		glBindVertexArray(VAO);
+
+		glClearColor(visualizerColors::BLACK.x, visualizerColors::BLACK.y, visualizerColors::BLACK.z, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		int screenWidth, screenHeight;
+		glfwGetWindowSize(window, &screenWidth, &screenHeight);
+
+		glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, -1.0f, 1.0f);
+		defaultShader.setMat4("projectionMatrix", projectionMatrix);
+
+		const std::vector<Sortable>& items = sortController.getItems();
+		const float rectangleWidth = (float)screenWidth / items.size();
+
+		for (int i = 0; i < items.size(); ++i)
+		{
+			const float rectangleHeight = items[i].getValue() / items.size() * screenHeight;
+
+			glm::mat4 modelMatrix = glm::mat4(1.0f);
+			modelMatrix = glm::translate(modelMatrix, glm::vec3((rectangleWidth) * i, screenHeight, 0.0f));
+			modelMatrix = glm::scale(modelMatrix, glm::vec3(rectangleWidth, rectangleHeight, 1.0f));
+
+			defaultShader.setMat4("modelMatrix", modelMatrix);
+			defaultShader.setVec3("color", items[i].getColor());
+
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+		}
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -155,4 +214,9 @@ void configureSortController(SortController& sortController)
 	sortController.shuffleItems();
 	sortController.setTimeStep(timeStepMicroseconds);
 	sortController.setSortType(SortType(sortTypeOrdinal));
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	glViewport(0, 0, width, height);
 }
