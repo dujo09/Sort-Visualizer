@@ -11,15 +11,24 @@
 #include <string>
 #include <sstream>
 #include <vector>
+#include <array>
 
+struct Vertex
+{
+	glm::vec2 position;
+	glm::vec3 color;
+};
 
 void processInput(GLFWwindow*& window, SortController& sortContoller);
 void configureSortController(SortController& sortController);
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+static Vertex* createRectangle(Vertex* target, float lowerLeftX, float lowerLeftY, float width, float height, glm::vec3 color);
 
 const float INITIAL_SCREEN_WIDTH = 800.0f;
 const float INITIAL_SCREEN_HEIGHT = 600.0f;
-const unsigned int MAX_NUMBER_OF_ITEMS = 1000;
+const float DISTANCE_BETWEEN_RECTANGLES = 0.0f;
+
+const unsigned int MAX_ITEM_COUNT = 5000;
 
 int main() {
 	glfwInit();
@@ -51,28 +60,43 @@ int main() {
 
 	Shader defaultShader("shaders/DefaultShader.vert", "shaders/DefaultShader.frag");
 
-	float quadVertices[] = {
-		0.0f, -1.0f,
-		1.0f,  0.0f,
-		0.0f,  0.0f,
+	const int MAX_INDEX_COUNT = MAX_ITEM_COUNT * 6;
+	const int MAX_VERTEX_COUNT = MAX_ITEM_COUNT * 4;
 
-		0.0f, -1.0f,
-		1.0f, -1.0f,
-		1.0f,  0.0f,
-	};
+	unsigned int indices[MAX_INDEX_COUNT];
 
-	unsigned int VAO, VBO;
+	int offset = 0;
+	for (int i = 0; i < MAX_INDEX_COUNT; i += 6)
+	{
+		indices[i + 0] = 0 + offset;
+		indices[i + 1] = 1 + offset;
+		indices[i + 2] = 2 + offset;
+
+		indices[i + 3] = 2 + offset;
+		indices[i + 4] = 3 + offset;
+		indices[i + 5] = 0 + offset;
+
+		offset += 4;
+	}
+
+	unsigned int VAO, VBO, EBO;
 
 	glGenVertexArrays(1, &VAO);
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO);
 
 	glBindVertexArray(VAO);
 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), quadVertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, MAX_VERTEX_COUNT * sizeof(Vertex), nullptr, GL_DYNAMIC_DRAW);
 
-	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+
+	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, position));
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const void*)offsetof(Vertex, color));
+	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
@@ -84,34 +108,38 @@ int main() {
 	{
 		processInput(window, sortController);
 
-		defaultShader.use();
-		glBindVertexArray(VAO);
-
-		glClearColor(visualizerColors::BLACK.x, visualizerColors::BLACK.y, visualizerColors::BLACK.z, 0.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-
 		int screenWidth, screenHeight;
 		glfwGetWindowSize(window, &screenWidth, &screenHeight);
 
-		glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)screenWidth, (float)screenHeight, 0.0f, -1.0f, 1.0f);
-		defaultShader.setMat4("projectionMatrix", projectionMatrix);
-
 		const std::vector<Sortable>& items = sortController.getItems();
-		const float rectangleWidth = (float)screenWidth / items.size();
+		const float rectangleWidth = (float)screenWidth / items.size() - DISTANCE_BETWEEN_RECTANGLES;
 
+		std::array<Vertex, MAX_VERTEX_COUNT> vertices;
+		Vertex* buffer = vertices.data();
+
+		int indexCount = 0;
 		for (int i = 0; i < items.size(); ++i)
 		{
 			const float rectangleHeight = items[i].getValue() / items.size() * screenHeight;
 
-			glm::mat4 modelMatrix = glm::mat4(1.0f);
-			modelMatrix = glm::translate(modelMatrix, glm::vec3((rectangleWidth) * i, screenHeight, 0.0f));
-			modelMatrix = glm::scale(modelMatrix, glm::vec3(rectangleWidth, rectangleHeight, 1.0f));
-
-			defaultShader.setMat4("modelMatrix", modelMatrix);
-			defaultShader.setVec3("color", items[i].getColor());
-
-			glDrawArrays(GL_TRIANGLES, 0, 6);
+			buffer = createRectangle(buffer, (rectangleWidth + DISTANCE_BETWEEN_RECTANGLES) * i, 0.0f, rectangleWidth, rectangleHeight, items[i].getColor());
+			indexCount += 6;
 		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertices.size() * sizeof(Vertex), vertices.data());
+
+		glClearColor(visualizerColors::BLACK.x, visualizerColors::BLACK.y, visualizerColors::BLACK.z, 0.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+
+		defaultShader.use();
+		
+		glm::mat4 projectionMatrix = glm::ortho(0.0f, (float)screenWidth, 0.0f, (float)screenHeight, -1.0f, 1.0f);
+		defaultShader.setMat4("projectionMatrix", projectionMatrix);
+
+		glBindVertexArray(VAO);
+
+		glDrawElements(GL_TRIANGLES, indexCount, GL_UNSIGNED_INT, nullptr);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
@@ -177,12 +205,12 @@ void configureSortController(SortController& sortController)
 	int sortTypeOrdinal = 0;
 
 	std::cout << "\nSORT CONFIGURATION\n";
-	std::cout << "Enter number of items (max is " << MAX_NUMBER_OF_ITEMS << "): ";
+	std::cout << "Enter number of items (max is " << MAX_ITEM_COUNT << "): ";
 	std::getline(std::cin, input);
 	std::stringstream(input) >> numberOfItems;
-	if (numberOfItems > MAX_NUMBER_OF_ITEMS || numberOfItems < 0)
+	if (numberOfItems > MAX_ITEM_COUNT || numberOfItems < 0)
 	{
-		numberOfItems = MAX_NUMBER_OF_ITEMS;
+		numberOfItems = MAX_ITEM_COUNT;
 	}
 
 	std::cout << "Enter time step (in microseconds): ";
@@ -219,4 +247,25 @@ void configureSortController(SortController& sortController)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
 	glViewport(0, 0, width, height);
+}
+
+static Vertex* createRectangle(Vertex* target, float lowerLeftX, float lowerLeftY, float width, float height, glm::vec3 color)
+{
+	target->position = glm::vec2(lowerLeftX, lowerLeftY);
+	target->color = color;
+	++target;
+
+	target->position = glm::vec2(lowerLeftX + width, lowerLeftY);
+	target->color = color;
+	++target;
+
+	target->position = glm::vec2(lowerLeftX + width, lowerLeftY + height);
+	target->color = color;
+	++target;
+
+	target->position = glm::vec2(lowerLeftX, lowerLeftY + height);
+	target->color = color;
+	++target;
+
+	return target;
 }
