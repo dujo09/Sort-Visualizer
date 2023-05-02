@@ -26,7 +26,7 @@ static Vertex* createRectangle(Vertex* target, float lowerLeftX, float lowerLeft
 
 const float INITIAL_SCREEN_WIDTH = 800.0f;
 const float INITIAL_SCREEN_HEIGHT = 600.0f;
-const float DISTANCE_BETWEEN_RECTANGLES = 0.0f;
+const float DISTANCE_BETWEEN_RECTANGLES = 1.0f;
 
 const unsigned int MAX_ITEM_COUNT = 5000;
 

@@ -4,12 +4,12 @@ A sorting algorithm visualizer coded in c++, rendering done with help of glfw.
 Made as a project to learn c++ and opengl. This program is useful
 for better understanding how sorting algorithms work.
 
-|                                                                              |
+|DEMOS                                                                         |
 |:----------------------------------------------------------------------------:|
-|Shell sort demo                                                               |
-|![Shell sort](art/shellSortDemo.gif)                                          |
-|Quick sort with 1000 items                                                    |
-|![Quick sort](art/quickSort1000Items.png)                                     |
+|Shell sort with 1000 items gif                                                |
+|![Shell sort](art/shellSort1000DEMO.gif)                                      |
+|Exchange sort with 100 items image                                            |
+|![Exchange sort](art/exchangeSort100.png)                                     |
 
 ## Implemented algorithms
 - Bubble sort
@@ -33,3 +33,4 @@ for better understanding how sorting algorithms work.
 
   - [Sorting visualizer used for reference](https://github.com/alesbe/sorting-visualizer)
   - [Timo Bingmann YT channel](https://www.youtube.com/@TimoBingmann)
+  - [The Cherno Batch rendering YT playlist](https://youtube.com/playlist?list=PLlrATfBNZ98f5vZ8nJ6UengEkZUMC4fy5)

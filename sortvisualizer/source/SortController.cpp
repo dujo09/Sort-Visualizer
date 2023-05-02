@@ -465,14 +465,16 @@ void SortController::setItemsColors(glm::vec3 highlightColor)
 
 void SortController::highlightItemsAsSorted()
 {
-	const unsigned int TIME_STEP = 2000 / m_items.size();
+	// TODO remove hard-coded numbers
+	const unsigned int TIME_STEP_NANOSECONDS = 100000000 / m_items.size();
+	const unsigned int PAUSE_STEP = m_items.size() * 0.01;
 
 	for (int i = 0; i < m_items.size(); ++i)
 	{
 		m_items[i].setColor(visualizerColors::RED);
-		if (!m_isInterrupt)
+		if (!m_isInterrupt && i % PAUSE_STEP == 0)
 		{
-			std::this_thread::sleep_for(std::chrono::microseconds(TIME_STEP));
+			std::this_thread::sleep_for(std::chrono::nanoseconds(TIME_STEP_NANOSECONDS));
 		}
 		m_items[i].setColor(visualizerColors::GREEN);
 	}
